@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Munka API",
-    "version": "1.0.2",
+    "version": "1.0.1",
     "description": "API for managing employers and job vacancies"
   },
   "servers": [
@@ -10,10 +10,25 @@
       "url": "http://localhost:5000/api"
     }
   ],
+  "tags": [
+    {
+      "name": "Employer",
+      "description": "Endpoints related to employer"
+    },
+    {
+      "name": "Vacancies",
+      "description": "Endpoints related to job vacancies"
+    },
+    {
+      "name": "Settings",
+      "description": "Endpoints related to settings"
+    }
+  ],
   "paths": {
     "/employer/registration": {
       "post": {
         "summary": "Register a new employer",
+        "tags": ["Employer"],
         "requestBody": {
           "required": true,
           "content": {
@@ -48,28 +63,34 @@
     },
     "/employer/auth": {
       "get": {
-        "summary": "Authenticate employer"
+        "summary": "Authenticate employer",
+        "tags": ["Employer"]
       }
     },
     "/vacancies": {
       "get": {
-        "summary": "Get all job vacancies"
+        "summary": "Get all job vacancies",
+        "tags": ["Vacancies"]
       },
       "post": {
-        "summary": "Create a new job vacancy"
+        "summary": "Create a new job vacancy",
+        "tags": ["Vacancies"]
       }
     },
     "/vacancies/{id}": {
       "post": {
-        "summary": "Edit job vacancy by ID"
+        "summary": "Edit job vacancy by ID",
+        "tags": ["Vacancies"]
       }
     },
     "/settings": {
       "get": {
-        "summary": "Get settings"
+        "summary": "Get settings",
+        "tags": ["Settings"]
       },
       "post": {
-        "summary": "Update settings"
+        "summary": "Update settings",
+        "tags": ["Settings"]
       }
     }
   }
