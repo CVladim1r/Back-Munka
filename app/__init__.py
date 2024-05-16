@@ -12,6 +12,11 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
     CORS(app)
+    
+    @app.route('/api/hello')
+    def hello():
+        return {'message': 'Hello from Flask API'}
+
     app.register_blueprint(api, url_prefix='/api')
     app.register_blueprint(swagger_bp, url_prefix='/api/docs')
     app.register_blueprint(swagger_ui_blueprint, url_prefix='/api/docs')

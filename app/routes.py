@@ -23,3 +23,7 @@ def create_job_vacancy():
     db.session.add(new_job_vacancy)
     db.session.commit()
     return jsonify({'message': 'Job vacancy created successfully'}), 201
+
+@api.route('/api/hello')
+def hello():
+    return {'message': 'Hello from Flask API'}
