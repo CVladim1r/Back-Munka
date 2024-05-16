@@ -3,6 +3,8 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from .models import db
 from .routes import api
 from .swagger_bp import swagger_bp, swagger_ui_blueprint
+import asyncio
+from bot.bot import main
 
 def create_app():
     app = Flask(__name__)
@@ -14,3 +16,7 @@ def create_app():
     app.register_blueprint(swagger_ui_blueprint, url_prefix='/api/docs')
 
     return app
+
+
+def create_app():
+    asyncio.run(main())
