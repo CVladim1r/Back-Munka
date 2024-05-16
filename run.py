@@ -1,3 +1,4 @@
+# Running the backend purely on flask
 from app import create_app
 
 app = create_app()

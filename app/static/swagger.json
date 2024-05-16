@@ -1,83 +1,76 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-      "title": "Munka API",
-      "version": "1.0.1",
-      "description": "API for managing employers and job vacancies"
-    },
-    "servers": [
-      {
-        "url": "http://localhost:5000/api"
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Munka API",
+    "version": "1.0.2",
+    "description": "API for managing employers and job vacancies"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/api"
+    }
+  ],
+  "paths": {
+    "/employer/registration": {
+      "post": {
+        "summary": "Register a new employer",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Employer registered successfully"
+          },
+          "400": {
+            "description": "Email already exists"
+          }
+        }
       }
-    ],
-    "paths": {
-      "/employers": {
-        "post": {
-          "summary": "Create a new employer",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "password": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["name", "email", "password"]
-                }
-              }
-            }
-          },
-          "responses": {
-            "201": {
-              "description": "Employer created successfully"
-            },
-            "400": {
-              "description": "Email already exists"
-            }
-          }
-        }
+    },
+    "/employer/auth": {
+      "get": {
+        "summary": "Authenticate employer"
+      }
+    },
+    "/vacancies": {
+      "get": {
+        "summary": "Get all job vacancies"
       },
-      "/job_vacancies": {
-        "post": {
-          "summary": "Create a new job vacancy",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "employer_id": {
-                      "type": "integer"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["employer_id", "title", "description"]
-                }
-              }
-            }
-          },
-          "responses": {
-            "201": {
-              "description": "Job vacancy created successfully"
-            }
-          }
-        }
+      "post": {
+        "summary": "Create a new job vacancy"
+      }
+    },
+    "/vacancies/{id}": {
+      "post": {
+        "summary": "Edit job vacancy by ID"
+      }
+    },
+    "/settings": {
+      "get": {
+        "summary": "Get settings"
+      },
+      "post": {
+        "summary": "Update settings"
       }
     }
   }
-  
+}
