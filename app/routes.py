@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from .models import db, Employer, JobVacancy
+from sqlalchemy.exc import IntegrityError
 
 api = Blueprint('api', __name__)
 
