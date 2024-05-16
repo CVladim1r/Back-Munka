@@ -7,7 +7,7 @@ from aiogram.fsm.context import FSMContext
 
 from bot.keyboards.inline import *
 from bot.keyboards.reply import *
-from bot.database.methods import *
+from app.database.methods import *
 from bot.utils.states import *
 
 from bot.handlers.bot_messages import *

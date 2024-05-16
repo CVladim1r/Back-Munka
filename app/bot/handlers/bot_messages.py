@@ -20,7 +20,7 @@ from aiogram.fsm.storage.base import (
 )
 from bot.cities import CITIES
 from bot.keyboards import *
-from bot.database.methods import *
+from app.database.methods import *
 
 from bot.handlers.bot_messages import *
 
@@ -32,8 +32,8 @@ from bot.utils import format_vacancy
 from bot.keyboards.inline import *
 from bot.keyboards.reply import *
 
-from bot.database.db_connector import *
-from bot.database.methods import *
+from app.database.db_connector import *
+from app.database.methods import *
 
 from bot.config_reader import config
 

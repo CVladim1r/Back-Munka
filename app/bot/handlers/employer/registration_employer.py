@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 
 from bot.keyboards import *
 from bot.utils.states import *
-from bot.database.methods import *
+from app.database.methods import *
 from bot.handlers.bot_messages import *
 from aiogram.exceptions import TelegramBadRequest
 

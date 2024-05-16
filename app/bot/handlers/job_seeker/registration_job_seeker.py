@@ -12,7 +12,7 @@ from .main_job_seeker import main_menu_job_seeker
 
 from bot.keyboards import *
 from bot.utils.states import *
-from bot.database.methods import *
+from app.database.methods import *
 from bot.handlers.bot_messages import *
 
 async def register_job_seeker(user_tgid, user_tgname, user_fullname, state: FSMContext):
