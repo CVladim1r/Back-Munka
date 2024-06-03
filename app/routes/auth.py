@@ -1,13 +1,15 @@
-from flask import render_template, request, jsonify
-from app import app
+from flask import Blueprint, request, jsonify, render_template
 from app.queries.auth import register_employer, get_employer_by_email
 from werkzeug.security import generate_password_hash, check_password_hash
 
-@app.route('/')
+auth_bp = Blueprint('auth', __name__)
+
+@auth_bp.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/register', methods=['POST'])
+
+@auth_bp.route('/register', methods=['POST'])
 def register():
     email = request.form.get('email')
     password = request.form.get('password')
@@ -22,7 +24,7 @@ def register():
     else:
         return jsonify({"msg": "Registration failed"}), 500
 
-@app.route('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST'])
 def login():
     email = request.form.get('email')
     password = request.form.get('password')

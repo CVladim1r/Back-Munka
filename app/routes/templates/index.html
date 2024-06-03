@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Test</title>
+</head>
+<body>
+    <h1>Registration</h1>
+    <form action="/register" method="POST">
+        <label for="reg-email">Email:</label>
+        <input type="email" id="reg-email" name="email" required><br>
+        <label for="reg-password">Password:</label>
+        <input type="password" id="reg-password" name="password" required><br>
+        <label for="reg-full-name">Full Name:</label>
+        <input type="text" id="reg-full-name" name="full_name" required><br>
+        <label for="reg-address">Address:</label>
+        <input type="text" id="reg-address" name="address"><br>
+        <label for="reg-phone">Phone:</label>
+        <input type="text" id="reg-phone" name="phone"><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <h1>Login</h1>
+    <form action="/login" method="POST">
+        <label for="login-email">Email:</label>
+        <input type="email" id="login-email" name="email" required><br>
+        <label for="login-password">Password:</label>
+        <input type="password" id="login-password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
