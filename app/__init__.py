@@ -1,28 +1,15 @@
+# app/__init__.py
 from flask import Flask
-from flask_cors import CORS
-from flask_swagger_ui import get_swaggerui_blueprint
-from .models import db
-from .routes import api
-from .swagger_bp import swagger_bp, swagger_ui_blueprint
-import asyncio
+from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
+from dotenv import load_dotenv
 
-def create_app():
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://your_username:your_password@localhost/your_database_name'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)
-    CORS(app)
-    
-    @app.route('/api/hello')
-    def hello():
-        return {'message': 'Hello from Flask API'}
+load_dotenv()
 
-    app.register_blueprint(api, url_prefix='/api')
-    app.register_blueprint(swagger_bp, url_prefix='/api/docs')
-    app.register_blueprint(swagger_ui_blueprint, url_prefix='/api/docs')
+app = Flask(__name__)
+app.config.from_object('app.config.Config')
 
-    return app
+db = SQLAlchemy(app)
+jwt = JWTManager(app)
 
-if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
+from app import routes
