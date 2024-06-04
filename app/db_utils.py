@@ -1,27 +1,20 @@
-# app/db_utils.py
-from flask import current_app
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import text
+from sqlalchemy.orm import scoped_session, sessionmaker
+from flask import current_app, g
 
 def get_db():
-    engine = create_engine(current_app.config['SQLALCHEMY_DATABASE_URI'])
-    Session = sessionmaker(bind=engine)
-    db = Session()
-    return db
+    if 'db' not in g:
+        g.db = scoped_session(
+            sessionmaker(
+                autocommit=False,
+                autoflush=False,
+                bind=create_engine(current_app.config['SQLALCHEMY_DATABASE_URI'])
+            )
+        )
+    return g.db
 
-    db = get_db()
-    try:
-        result = db.execute(
-            text("""
-            SELECT * FROM employers
-            WHERE email = :email
-            """),
-            {'email': email}
-        ).fetchone()
-        return result
-    except Exception as e:
-        print(f"Error getting employer by email: {e}")
-        return None
-    finally:
-        db.close()
+def close_db(e=None):
+    db = g.pop('db', None)
+
+    if db is not None:
+        db.remove()
