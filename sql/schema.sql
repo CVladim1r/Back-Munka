@@ -2,18 +2,17 @@ CREATE DATABASE IF NOT EXISTS munkaDB;
 
 USE munkaDB;
 
---Аккаунтов работодателей
 CREATE TABLE IF NOT EXISTS employers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(128) NOT NULL,
-    salt VARCHAR(32) NOT NULL,
-    employers_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    password_hash VARCHAR(255) NOT NULL,
+    salt VARCHAR(255) NOT NULL,
+    employers_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
---Таблица Инфы по работодателям
+
 CREATE TABLE IF NOT EXISTS employers_info (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    employers_info_id INT NOT NULL,
+    employer_id INT NOT NULL,
     employers_info_full_name VARCHAR(255) NOT NULL,
     employers_info_address VARCHAR(255),
     employers_info_phone VARCHAR(20),
@@ -25,7 +24,6 @@ CREATE TABLE IF NOT EXISTS employers_info (
     FOREIGN KEY (employer_id) REFERENCES employers(id) ON DELETE CASCADE
 );
 
--- Таблица пользователей
 CREATE TABLE IF NOT EXISTS job_seekers (
     job_seeker_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     job_seeker_tgid BIGINT,
@@ -47,7 +45,6 @@ CREATE TABLE IF NOT EXISTS job_seekers (
     job_seeker_language VARCHAR(255) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Таблица вакансий
 CREATE TABLE IF NOT EXISTS vacancies (
     vacancy_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     employer_id INT NOT NULL,
@@ -68,7 +65,6 @@ CREATE TABLE IF NOT EXISTS vacancies (
     FOREIGN KEY (employer_id) REFERENCES employers(id) ON DELETE CASCADE
 );
 
--- Таблица заявок на вакансии
 CREATE TABLE IF NOT EXISTS job_applications (
     application_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     job_seeker_id INT NOT NULL,
@@ -79,7 +75,6 @@ CREATE TABLE IF NOT EXISTS job_applications (
     FOREIGN KEY (vacancy_id) REFERENCES vacancies(vacancy_id) ON DELETE CASCADE
 );
 
--- Создание триггера для обновления даты создания вакансии
 DELIMITER //
 CREATE TRIGGER vacancy_updated_date
 BEFORE UPDATE ON vacancies
@@ -91,7 +86,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Таблица баланса работодателей
 CREATE TABLE IF NOT EXISTS employer_balance (
     id INT AUTO_INCREMENT PRIMARY KEY,
     employer_id INT NOT NULL,
@@ -99,7 +93,6 @@ CREATE TABLE IF NOT EXISTS employer_balance (
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (employer_id) REFERENCES employers(id) ON DELETE CASCADE
 );
--- Триггер для обновления баланса работодателя
 DELIMITER $$
 CREATE TRIGGER trg_update_employer_balance
 AFTER UPDATE ON employer_balance
@@ -111,34 +104,28 @@ BEGIN
 END$$
 DELIMITER ;
 
--- Триггер для обновления даты обновления вакансии
 DELIMITER $$
 CREATE TRIGGER trg_update_vacancy_updated_date
 BEFORE UPDATE ON vacancies
 FOR EACH ROW
 BEGIN
-    IF NEW.description != OLD.description OR NEW.title != OLD.title THEN
-        SET NEW.updated_date = NOW();
+    IF NEW.vacancy_description != OLD.vacancy_description OR NEW.vacancy_title != OLD.vacancy_title THEN
+        SET NEW.vacancy_updated_date = NOW();
     END IF;
 END$$
 DELIMITER ;
 
--- Создание индексов для таблицы job_seeker
 ALTER TABLE job_seekers ADD INDEX job_seeker_tgid_index (job_seeker_tgid);
 ALTER TABLE job_seekers ADD INDEX job_seeker_desired_position_index (job_seeker_desired_position);
 
--- Создание индексов для таблицы employers
 ALTER TABLE employers ADD INDEX employer_tgid_index (employer_tgid);
 ALTER TABLE employers ADD INDEX employer_desired_position_index (employer_desired_position);
 
--- Создание индексов для таблицы vacancies
 ALTER TABLE vacancies ADD INDEX employer_id_index (employer_id);
 ALTER TABLE vacancies ADD INDEX vacancy_created_date_index (vacancy_created_date);
 
--- Создание индексов для таблицы applications
 ALTER TABLE applications ADD INDEX application_vacancy_id_index (vacancy_id);
 ALTER TABLE applications ADD INDEX application_job_seeker_id_index (job_seeker_id);
 
--- Создание индексов для таблицы viewed_vacancies
 ALTER TABLE viewed_vacancies ADD INDEX viewed_vacancies_job_seeker_id_index (job_seeker_id);
 ALTER TABLE viewed_vacancies ADD INDEX viewed_vacancies_vacancy_id_index (vacancy_id);
