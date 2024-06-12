@@ -1,0 +1,22 @@
+# Ignore the configuration file
+app/config.py
+
+# Environment variables file
+.env
+
+# Python related files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask related files
+instance/
+*.db
+
+# Other potential files to ignore
+venv/
+.DS_Store
+.idea/
+.vscode/
+*.swp
