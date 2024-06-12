@@ -9,14 +9,15 @@ import random
 from flask_mail import Message
 from flask import current_app as app
 
-
-
+# Генерация соли для хеширования паролей
 def generate_salt():
     return base64.b64encode(os.urandom(16)).decode('utf-8')
 
+# Инициализация Blueprint
 auth_bp = Blueprint('auth', __name__)
 logging.basicConfig(level=logging.INFO)
 
+# Маршрут для регистрации
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -49,8 +50,7 @@ def register():
         logging.error(f"Error registering employer: {e}")
         return jsonify({"msg": "Registration failed"}), 500
 
-
-
+# Маршрут для входа в систему
 @auth_bp.route('/login', methods=['POST'])
 def login():
     logging.info(f'Headers: {request.headers}')
@@ -78,20 +78,23 @@ def login():
     else:
         return jsonify({"msg": "Content-Type must be application/json"}), 415
 
+# Маршрут для выхода из системы
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)
     return jsonify({"msg": "Logout successful"}), 200
 
+# Маршрут для получения профиля пользователя
 @auth_bp.route('/profile', methods=['GET'])
 def profile():
     if 'user_id' in session:
         user_id = session['user_id']
-        # Get user details using user_id
+        # Здесь нужно получить детали пользователя по user_id
         return jsonify({"user_id": user_id}), 200
     else:
         return jsonify({"msg": "Access denied: unauthorized"}), 401
 
+# Маршрут для проверки токена
 @auth_bp.route('/verify_token', methods=['POST'])
 @jwt_required()
 def verify_token():
@@ -102,18 +105,24 @@ def verify_token():
     except Exception as e:
         return jsonify({'msg': 'Token is invalid', 'error': str(e)}), 401
 
-
-
+# Генерация кода для сброса пароля
 def generate_reset_code():
     return str(random.randint(10000000, 99999999))
 
-@auth_bp.route('/')
+# Маршрут для отправки email
+@auth_bp.route('/send_email', methods=['POST'])
 def send_email():
+    data = request.get_json()
+    email = data.get('email')
+    new_password = data.get('new_password')
+
+    # Здесь нужно добавить логику для обновления пароля пользователя в базе данных
+
     msg = Message(
-        'Смена пароля',  # Изменено на более формальное сообщение
-        recipients=['vladimir.973@list.ru'],
-        body='Добрый день, вы запросили сброс пароля. Ваш новый пароль: 123456'  # Изменено на более информативное сообщение
+        'Password Reset Request',
+        recipients=[email],
+        body=f'Hello, you requested a password reset. Your new password is: {new_password}'
     )
-    app.mail.send(msg)  # Теперь используем mail из app, чтобы отправить письмо
-    return 'Email sent successfully!'
+    app.mail.send(msg)
+    return jsonify({"msg": "Email sent successfully!"}), 200
 
