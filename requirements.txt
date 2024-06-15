@@ -3,6 +3,7 @@ bcrypt
 psycopg2-binary
 Flask-SQLAlchemy
 Flask-JWT-Extended
+flask_sqlalchemy
 mysqlclient
 Flask-Migrate
 python-dotenv
